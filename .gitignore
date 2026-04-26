@@ -1,0 +1,14 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+*.jks
+*.keystore
+# Keep gradle wrapper jar (needed for CI)
+!gradle/wrapper/gradle-wrapper.jar

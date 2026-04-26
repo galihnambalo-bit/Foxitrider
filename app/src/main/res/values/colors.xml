@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary brand colors -->
+    <color name="colorPrimary">#1565C0</color>
+    <color name="colorPrimaryDark">#0D47A1</color>
+    <color name="colorPrimaryLight">#BBDEFB</color>
+    <color name="colorSecondary">#FF6F00</color>
+    <color name="colorAccent">#FF6F00</color>
+
+    <!-- Backgrounds -->
+    <color name="colorBackground">#F5F7FA</color>
+    <color name="colorSurface">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="colorText">#1A1A2E</color>
+    <color name="colorTextSecondary">#6B7280</color>
+
+    <!-- UI elements -->
+    <color name="colorDivider">#E5E7EB</color>
+    <color name="colorError">#D32F2F</color>
+    <color name="colorSuccess">#2E7D32</color>
+    <color name="colorWarning">#F57F17</color>
+
+    <!-- Misc -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Bottom nav -->
+    <color name="colorBottomNavActive">#1565C0</color>
+    <color name="colorBottomNavInactive">#9E9E9E</color>
+</resources>

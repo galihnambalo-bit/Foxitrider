@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🛠️ Semua Alat PDF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorText"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Organize -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ORGANISIR"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorTextSecondary"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/colorSurface"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/btnMerge"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔗" android:textSize="20sp" android:layout_marginEnd="16dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gabungkan PDF" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/colorText" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Satukan beberapa PDF" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:padding="4dp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/colorDivider" android:layout_marginStart="52dp" />
+
+                <LinearLayout
+                    android:id="@+id/btnSplit"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✂️" android:textSize="20sp" android:layout_marginEnd="16dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pisahkan PDF" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/colorText" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pisah halaman tertentu" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:padding="4dp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/colorDivider" android:layout_marginStart="52dp" />
+
+                <LinearLayout
+                    android:id="@+id/btnCompress"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📦" android:textSize="20sp" android:layout_marginEnd="16dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kompres PDF" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/colorText" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kecilkan ukuran file" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:padding="4dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Protect -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KEAMANAN"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorTextSecondary"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/colorSurface"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/btnEncrypt"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔒" android:textSize="20sp" android:layout_marginEnd="16dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Enkripsi PDF" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/colorText" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tambahkan kata sandi" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:padding="4dp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/colorDivider" android:layout_marginStart="52dp" />
+
+                <LinearLayout
+                    android:id="@+id/btnDecrypt"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔓" android:textSize="20sp" android:layout_marginEnd="16dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Buka Proteksi PDF" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/colorText" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hapus kata sandi" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:padding="4dp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/colorDivider" android:layout_marginStart="52dp" />
+
+                <LinearLayout
+                    android:id="@+id/btnWatermark"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💧" android:textSize="20sp" android:layout_marginEnd="16dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Watermark" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/colorText" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tambah tanda air" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:padding="4dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Convert -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KONVERSI &amp; LAINNYA"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorTextSecondary"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/colorSurface"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/btnConvert"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔄" android:textSize="20sp" android:layout_marginEnd="16dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Konversi File" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/colorText" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gambar ke PDF &amp; lainnya" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:padding="4dp" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/colorDivider" android:layout_marginStart="52dp" />
+
+                <LinearLayout
+                    android:id="@+id/btnSign"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✍️" android:textSize="20sp" android:layout_marginEnd="16dp" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tanda Tangan Digital" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/colorText" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tandatangani dokumen" android:textSize="12sp" android:textColor="@color/colorTextSecondary" />
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:padding="4dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>

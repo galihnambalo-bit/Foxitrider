@@ -1,0 +1,103 @@
+name: Build Foxit Rider APK
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:   # allows manual trigger from GitHub UI
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout source code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Set up Java 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      # 3. Grant gradlew execute permission
+      - name: Grant Gradle Execute Permission
+        run: chmod +x gradlew
+
+      # 4. Cache Gradle dependencies
+      - name: Cache Gradle Packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 5. Build Debug APK
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      # 6. (Optional) Build Release APK - requires signing keys
+      # - name: Build Release APK
+      #   run: ./gradlew assembleRelease
+      #   env:
+      #     KEYSTORE_FILE: ${{ secrets.KEYSTORE_FILE }}
+      #     KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      #     KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      #     KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+      # 7. Sign Release APK (when you have keystore set up)
+      # - name: Sign APK
+      #   uses: r0adkll/sign-android-release@v1
+      #   with:
+      #     releaseDirectory: app/build/outputs/apk/release
+      #     signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+      #     alias: ${{ secrets.KEY_ALIAS }}
+      #     keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+      #     keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      # 8. Upload Debug APK as artifact
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: FoxitRider-Debug-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      # 9. Get APK info
+      - name: APK Build Info
+        run: |
+          echo "=== BUILD SUCCESS ==="
+          echo "APK Location: app/build/outputs/apk/debug/app-debug.apk"
+          ls -lh app/build/outputs/apk/debug/ || echo "APK not found"
+          echo "========================"
+
+      # 10. Create GitHub Release (only on version tags)
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: app/build/outputs/apk/debug/app-debug.apk
+          name: Foxit Rider ${{ github.ref_name }}
+          body: |
+            ## 📱 Foxit Rider ${{ github.ref_name }}
+            
+            ### Fitur Baru
+            - PDF Editor lengkap
+            - Gabung, Pisah, Kompres PDF
+            - Watermark & Enkripsi
+            - Tanda tangan digital
+            - Iklan AdMob (Banner + Rewarded)
+            - Fitur Pro gratis dengan tonton iklan
+            
+            ### Download
+            Download APK dari bagian **Assets** di bawah.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
