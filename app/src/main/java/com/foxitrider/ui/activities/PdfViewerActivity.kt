@@ -1,25 +1,31 @@
 package com.foxitrider.ui.activities
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
+import android.os.ParcelFileDescriptor
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.foxitrider.R
 import com.foxitrider.ads.AdManager
 import com.foxitrider.databinding.ActivityPdfViewerBinding
-import com.rajat.pdfviewer.PdfViewerActivity as PdfLib
 import java.io.File
 
 class PdfViewerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPdfViewerBinding
     private var pdfFile: File? = null
+    private var pdfRenderer: PdfRenderer? = null
+    private var parcelFileDescriptor: ParcelFileDescriptor? = null
     private var currentPage = 0
-    private var totalPages = 1
+    private var totalPages = 0
 
     companion object {
         const val EXTRA_PDF_PATH = "pdf_path"
@@ -43,11 +49,15 @@ class PdfViewerActivity : AppCompatActivity() {
             pdfPath != null -> {
                 pdfFile = File(pdfPath)
                 supportActionBar?.title = pdfFile?.name ?: "PDF Viewer"
-                openWithPdfLib(null, pdfPath)
+                openPdfFile(pdfFile!!)
             }
             pdfUri != null -> {
                 supportActionBar?.title = "Dokumen PDF"
-                openWithPdfLib(pdfUri, null)
+                copyUriToFile(Uri.parse(pdfUri))
+            }
+            else -> {
+                Toast.makeText(this, "File tidak ditemukan", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
 
@@ -59,29 +69,50 @@ class PdfViewerActivity : AppCompatActivity() {
         binding.adBannerContainer.addView(bannerAd)
     }
 
-    private fun openWithPdfLib(uriStr: String?, path: String?) {
+    private fun copyUriToFile(uri: Uri) {
         try {
-            val intent = if (path != null) {
-                PdfLib.launchPdfFromPath(
-                    this,
-                    path,
-                    pdfFile?.name ?: "PDF",
-                    "FoxitRider",
-                    enableDownload = false
-                )
-            } else {
-                PdfLib.launchPdfFromUrl(
-                    this,
-                    uriStr ?: "",
-                    "PDF",
-                    "FoxitRider",
-                    enableDownload = false
-                )
+            val tempFile = File(cacheDir, "temp_view.pdf")
+            contentResolver.openInputStream(uri)?.use { input ->
+                tempFile.outputStream().use { output -> input.copyTo(output) }
             }
-            startActivity(intent)
+            pdfFile = tempFile
+            openPdfFile(tempFile)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun openPdfFile(file: File) {
+        try {
+            parcelFileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+            pdfRenderer = PdfRenderer(parcelFileDescriptor!!)
+            totalPages = pdfRenderer!!.pageCount
+            binding.progressLoading.visibility = View.GONE
+            showPage(0)
+            updatePageInfo()
         } catch (e: Exception) {
             Toast.makeText(this, "Error membuka PDF: ${e.message}", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun showPage(pageNum: Int) {
+        if (pageNum < 0 || pageNum >= totalPages) return
+        val renderer = pdfRenderer ?: return
+
+        val page = renderer.openPage(pageNum)
+        val bitmap = Bitmap.createBitmap(
+            page.width * 2, page.height * 2, Bitmap.Config.ARGB_8888
+        )
+        page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+        page.close()
+
+        binding.pdfView.setImageBitmap(bitmap)
+        currentPage = pageNum
+        updatePageInfo()
+    }
+
+    private fun updatePageInfo() {
+        binding.tvPageInfo.text = "${currentPage + 1} / $totalPages"
     }
 
     private fun setupControls() {
@@ -92,12 +123,20 @@ class PdfViewerActivity : AppCompatActivity() {
                     intent.putExtra(PdfEditorActivity.EXTRA_PDF_PATH, file.absolutePath)
                     startActivity(intent)
                 }
-            } ?: Toast.makeText(this, "File tidak tersedia untuk diedit", Toast.LENGTH_SHORT).show()
+            }
         }
+        binding.btnPrevPage.setOnClickListener {
+            if (currentPage > 0) showPage(currentPage - 1)
+        }
+        binding.btnNextPage.setOnClickListener {
+            if (currentPage < totalPages - 1) showPage(currentPage + 1)
+        }
+    }
 
-        binding.btnPrevPage.setOnClickListener { }
-        binding.btnNextPage.setOnClickListener { }
-        binding.tvPageInfo.text = "PDF"
+    override fun onDestroy() {
+        super.onDestroy()
+        pdfRenderer?.close()
+        parcelFileDescriptor?.close()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -9,15 +9,12 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <!-- Small banner ad at TOP - non-intrusive -->
         <LinearLayout
             android:id="@+id/adBannerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@color/colorSurface" />
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -26,7 +23,6 @@
             android:background="@color/colorPrimary"
             app:titleTextColor="@color/white"
             app:navigationIconTint="@color/white" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
@@ -34,21 +30,26 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.github.barteksc.pdfviewer.PDFView
-            android:id="@+id/pdfView"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/pdfView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:contentDescription="PDF Page" />
+        </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
             android:id="@+id/progressLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone" />
-
+            android:visibility="visible" />
     </FrameLayout>
 
-    <!-- Bottom controls -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,22 +57,19 @@
         android:orientation="vertical"
         android:background="@color/colorSurface"
         android:elevation="8dp">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:orientation="horizontal"
             android:gravity="center"
             android:padding="4dp">
-
             <ImageButton
                 android:id="@+id/btnPrevPage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_arrow_left"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Halaman Sebelumnya" />
-
+                android:contentDescription="Prev" />
             <TextView
                 android:id="@+id/tvPageInfo"
                 android:layout_width="0dp"
@@ -81,17 +79,14 @@
                 android:text="1 / 1"
                 android:textSize="14sp"
                 android:textColor="@color/colorText" />
-
             <ImageButton
                 android:id="@+id/btnNextPage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_arrow_right"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Halaman Berikutnya" />
-
+                android:contentDescription="Next" />
         </LinearLayout>
-
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
