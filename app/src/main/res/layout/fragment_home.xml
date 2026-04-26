@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📄 Foxit Rider" android:textSize="24sp" android:textStyle="bold" android:textColor="@color/colorText" android:layout_marginBottom="4dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Editor PDF Profesional" android:textSize="13sp" android:textColor="@color/colorTextSecondary" android:layout_marginBottom="20dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="20dp">
+            <Button android:id="@+id/btnOpenPdf" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="📂 Buka PDF" android:layout_marginEnd="8dp"/>
+            <Button android:id="@+id/btnBrowseFiles" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:text="🗂️ File Manager" android:backgroundTint="@color/colorSurface" android:textColor="@color/colorPrimary" style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+        </LinearLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⚡ Alat Pro" android:textSize="16sp" android:textStyle="bold" android:textColor="@color/colorText" android:layout_marginBottom="12dp"/>
+        <androidx.gridlayout.widget.GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" app:columnCount="2" app:rowCount="3" android:layout_marginBottom="16dp">
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardMerge" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="6dp" app:layout_columnWeight="1" app:cardCornerRadius="12dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/colorSurface">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔗" android:textSize="28sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gabungkan" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/colorText"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:paddingStart="6dp" android:paddingEnd="6dp" android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardSplit" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="6dp" app:layout_columnWeight="1" app:cardCornerRadius="12dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/colorSurface">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✂️" android:textSize="28sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pisahkan" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/colorText"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:paddingStart="6dp" android:paddingEnd="6dp" android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardCompress" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="6dp" app:layout_columnWeight="1" app:cardCornerRadius="12dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/colorSurface">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📦" android:textSize="28sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kompres" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/colorText"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:paddingStart="6dp" android:paddingEnd="6dp" android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardWatermark" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="6dp" app:layout_columnWeight="1" app:cardCornerRadius="12dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/colorSurface">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💧" android:textSize="28sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Watermark" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/colorText"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:paddingStart="6dp" android:paddingEnd="6dp" android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardEncrypt" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="6dp" app:layout_columnWeight="1" app:cardCornerRadius="12dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/colorSurface">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔒" android:textSize="28sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Enkripsi" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/colorText"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:paddingStart="6dp" android:paddingEnd="6dp" android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView android:id="@+id/cardConvert" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="6dp" app:layout_columnWeight="1" app:cardCornerRadius="12dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/colorSurface">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:gravity="center">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔄" android:textSize="28sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Konversi" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/colorText"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" android:textSize="10sp" android:textColor="@color/white" android:background="@drawable/bg_pro_badge" android:paddingStart="6dp" android:paddingEnd="6dp" android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.gridlayout.widget.GridLayout>
+    </LinearLayout>
+</ScrollView>

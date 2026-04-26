@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Foxit Rider</string>
+    <string name="nav_home">Beranda</string>
+    <string name="nav_recent">Terbaru</string>
+    <string name="nav_tools">Alat</string>
+    <string name="nav_settings">Pengaturan</string>
+</resources>

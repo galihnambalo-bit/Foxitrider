@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/adContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:titleTextColor="@color/white"
+        app:navigationIconTint="@color/white"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/colorSurface"
+            android:padding="4dp"
+            android:elevation="4dp">
+            <ImageButton android:id="@+id/toolAnnotate" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_annotate" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Anotasi" android:tint="@color/colorPrimary"/>
+            <ImageButton android:id="@+id/toolHighlight" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_highlight" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Highlight" android:tint="@color/colorSecondary"/>
+            <ImageButton android:id="@+id/toolDraw" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_draw" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Draw" android:tint="@color/colorPrimary"/>
+            <ImageButton android:id="@+id/toolText" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_text" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Text" android:tint="@color/colorPrimary"/>
+            <ImageButton android:id="@+id/toolEraser" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_eraser" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Eraser" android:tint="@color/colorPrimary"/>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/colorDivider" android:layout_marginVertical="8dp"/>
+            <ImageButton android:id="@+id/toolRotate" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_rotate" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Rotate" android:tint="@color/colorSecondary"/>
+            <ImageButton android:id="@+id/toolPageNumber" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_numbers" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Numbers" android:tint="@color/colorSecondary"/>
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="✏️\n\nMode Edit Aktif\nGunakan alat di sebelah kiri"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="16sp"
+                android:textAlignment="center"/>
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>
