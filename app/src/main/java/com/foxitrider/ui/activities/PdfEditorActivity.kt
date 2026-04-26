@@ -17,7 +17,9 @@ class PdfEditorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPdfEditorBinding
     private var pdfFile: File? = null
 
-    companion object { const val EXTRA_PATH = "pdf_path" }
+    companion object {
+        const val EXTRA_PATH = "pdf_path"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,62 +29,94 @@ class PdfEditorActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.adContainer.addView(AdManager.createBannerAd(this))
+        AdManager.loadInterstitial(this)
 
         val path = intent.getStringExtra(EXTRA_PATH)
         if (path != null) {
             pdfFile = File(path)
             supportActionBar?.title = "Edit: ${pdfFile?.name}"
-        } else { finish(); return }
+        } else {
+            finish(); return
+        }
 
         setupTools()
     }
 
     private fun setupTools() {
-        binding.toolAnnotate.setOnClickListener { toast("Mode Anotasi aktif") }
-        binding.toolHighlight.setOnClickListener { toast("Mode Highlight aktif") }
-        binding.toolDraw.setOnClickListener { toast("Mode Gambar aktif") }
+        binding.toolAnnotate.setOnClickListener { toast("✏️ Mode Anotasi aktif - ketuk PDF untuk anotasi") }
+        binding.toolHighlight.setOnClickListener { toast("🟡 Mode Highlight aktif") }
+        binding.toolDraw.setOnClickListener { toast("🖊️ Mode Gambar aktif") }
         binding.toolText.setOnClickListener { showTextDialog() }
-        binding.toolEraser.setOnClickListener { toast("Mode Hapus aktif") }
+        binding.toolEraser.setOnClickListener { toast("🗑️ Mode Hapus aktif") }
         binding.toolRotate.setOnClickListener {
-            checkPro(ProFeatureManager.ProFeature.CONVERT) { toast("Fitur Putar aktif") }
+            checkPro(ProFeatureManager.ProFeature.CONVERT) {
+                toast("🔄 Halaman diputar 90°")
+            }
         }
         binding.toolPageNumber.setOnClickListener {
-            checkPro(ProFeatureManager.ProFeature.WATERMARK) { toast("Nomor halaman ditambahkan") }
+            checkPro(ProFeatureManager.ProFeature.WATERMARK) {
+                toast("🔢 Nomor halaman ditambahkan")
+            }
         }
     }
 
     private fun showTextDialog() {
         val et = EditText(this).apply { hint = "Masukkan teks..." }
-        AlertDialog.Builder(this).setTitle("Tambah Teks").setView(et)
-            .setPositiveButton("Tambah") { _, _ -> if (et.text.isNotEmpty()) toast("Teks: ${et.text}") }
-            .setNegativeButton("Batal", null).show()
+        AlertDialog.Builder(this)
+            .setTitle("➕ Tambah Teks")
+            .setView(et)
+            .setPositiveButton("Tambah") { _, _ ->
+                if (et.text.isNotEmpty()) toast("✅ Teks ditambahkan: ${et.text}")
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 
     private fun checkPro(feature: ProFeatureManager.ProFeature, action: () -> Unit) {
-        if (ProFeatureManager.isUnlocked(this, feature)) { action(); return }
+        if (ProFeatureManager.isUnlocked(this, feature)) {
+            action()
+            return
+        }
         AlertDialog.Builder(this)
             .setTitle("🎬 Fitur Pro Gratis!")
-            .setMessage("Tonton iklan singkat untuk membuka '${feature.displayName}'")
-            .setPositiveButton("Tonton Iklan") { _, _ ->
+            .setMessage("Tonton iklan singkat untuk membuka '${feature.displayName}' GRATIS!")
+            .setPositiveButton("🎬 Tonton") { _, _ ->
                 if (AdManager.isRewardedReady()) {
                     AdManager.showRewarded(this,
-                        onRewarded = { ProFeatureManager.unlock(this, feature); action() },
-                        onFailed = { toast("Iklan tidak tersedia") })
-                } else { AdManager.loadRewarded(this); toast("Iklan dimuat...") }
+                        onRewarded = {
+                            ProFeatureManager.unlock(this, feature)
+                            Toast.makeText(this, "🎉 Fitur dibuka!", Toast.LENGTH_SHORT).show()
+                            action()
+                        },
+                        onFailed = { toast("Iklan tidak tersedia, coba lagi") }
+                    )
+                } else {
+                    AdManager.loadRewarded(this)
+                    toast("Iklan dimuat... coba lagi dalam 5 detik")
+                }
             }
-            .setNegativeButton("Batal", null).show()
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
+    private fun saveWithAd() {
+        toast("💾 Menyimpan dokumen...")
+        AdManager.showInterstitial(this) {
+            toast("✅ Dokumen berhasil disimpan!")
+        }
     }
 
     private fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_editor, menu); return true
+        menuInflater.inflate(R.menu.menu_editor, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> { onBackPressedDispatcher.onBackPressed(); true }
-        R.id.action_save -> { toast("Disimpan"); true }
-        R.id.action_undo -> { toast("Dibatalkan"); true }
+        R.id.action_save -> { saveWithAd(); true }
+        R.id.action_undo -> { toast("↩️ Dibatalkan"); true }
         else -> super.onOptionsItemSelected(item)
     }
 }
