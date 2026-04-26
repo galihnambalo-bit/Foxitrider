@@ -15,7 +15,7 @@ class SettingsFragment : Fragment() {
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View { _b = FragmentSettingsBinding.inflate(i,c,false); return b.root }
     override fun onViewCreated(v: View, s: Bundle?) {
         super.onViewCreated(v, s)
-        b.tvVersion.text = "Versi ${BuildConfig.VERSION_NAME}"
+        b.tvVersion.text = "Versi ${"1.0.0"}"
         updateProStatus()
         b.btnUnlockAll.setOnClickListener {
             if (AdManager.isRewardedReady()) {
