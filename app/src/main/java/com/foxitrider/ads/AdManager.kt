@@ -10,7 +10,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 object AdManager {
     private const val BANNER_ID = "ca-app-pub-4744122948371705/5604675924"
-    private const val INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712"
+    private const val INTERSTITIAL_ID = "ca-app-pub-4744122948371705/8972330436"
     private const val REWARDED_ID = "ca-app-pub-4744122948371705/1141627244"
 
     private var interstitialAd: InterstitialAd? = null
