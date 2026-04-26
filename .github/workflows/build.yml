@@ -2,7 +2,7 @@ name: Build Foxit Rider APK
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, testing-mode ]
   workflow_dispatch:
 
 jobs:

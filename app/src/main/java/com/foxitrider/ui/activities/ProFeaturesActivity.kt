@@ -68,8 +68,8 @@ class ProFeaturesActivity : AppCompatActivity() {
                 Toast.makeText(this, "⚠️ Pilih file PDF dulu!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (ProFeatureManager.isUnlocked(this, currentFeature)) runFeature()
-            else showAdDialog()
+            runFeature() // testing
+            // ads disabled for testing
         }
     }
 
@@ -111,7 +111,7 @@ class ProFeaturesActivity : AppCompatActivity() {
             }
             runOnUiThread {
                 result.onSuccess { file ->
-                    Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil!\n${file.name}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil disimpan di Downloads/FoxitRider!\n${file.name}", Toast.LENGTH_LONG).show()
                     binding.btnExecute.text = "✅ Selesai!"
                     binding.btnExecute.isEnabled = true
                 }.onFailure {
@@ -138,7 +138,7 @@ class ProFeaturesActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     val result = PdfProcessor.split(this@ProFeaturesActivity, selectedUris[0], s, e)
                     runOnUiThread {
-                        result.onSuccess { file -> Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil!\n${file.name}", Toast.LENGTH_LONG).show(); binding.btnExecute.text = "✅ Selesai!"; binding.btnExecute.isEnabled = true }
+                        result.onSuccess { file -> Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil disimpan di Downloads/FoxitRider!\n${file.name}", Toast.LENGTH_LONG).show(); binding.btnExecute.text = "✅ Selesai!"; binding.btnExecute.isEnabled = true }
                         .onFailure { Toast.makeText(this@ProFeaturesActivity, "❌ ${it.message}", Toast.LENGTH_SHORT).show(); resetButton() }
                     }
                 }
@@ -155,7 +155,7 @@ class ProFeaturesActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     val result = PdfProcessor.addWatermark(this@ProFeaturesActivity, selectedUris[0], text)
                     runOnUiThread {
-                        result.onSuccess { file -> Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil!\n${file.name}", Toast.LENGTH_LONG).show(); binding.btnExecute.text = "✅ Selesai!"; binding.btnExecute.isEnabled = true }
+                        result.onSuccess { file -> Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil disimpan di Downloads/FoxitRider!\n${file.name}", Toast.LENGTH_LONG).show(); binding.btnExecute.text = "✅ Selesai!"; binding.btnExecute.isEnabled = true }
                         .onFailure { Toast.makeText(this@ProFeaturesActivity, "❌ ${it.message}", Toast.LENGTH_SHORT).show(); resetButton() }
                     }
                 }
