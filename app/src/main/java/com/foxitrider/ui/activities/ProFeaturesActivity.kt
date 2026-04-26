@@ -68,8 +68,8 @@ class ProFeaturesActivity : AppCompatActivity() {
                 Toast.makeText(this, "⚠️ Pilih file PDF dulu!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (ProFeatureManager.isUnlocked(this, currentFeature)) runFeature()
-            else showAdDialog()
+            runFeature() // testing
+            // ads disabled for testing
         }
     }
 
