@@ -4,11 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/adContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,10 +18,14 @@
         android:background="@color/colorPrimary"
         app:titleTextColor="@color/white"
         app:navigationIconTint="@color/white"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
+
+        <!-- Left toolbar -->
         <LinearLayout
             android:layout_width="52dp"
             android:layout_height="match_parent"
@@ -27,27 +33,132 @@
             android:background="@color/colorSurface"
             android:padding="4dp"
             android:elevation="4dp">
-            <ImageButton android:id="@+id/toolAnnotate" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_annotate" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Anotasi" android:tint="@color/colorPrimary"/>
-            <ImageButton android:id="@+id/toolHighlight" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_highlight" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Highlight" android:tint="@color/colorSecondary"/>
-            <ImageButton android:id="@+id/toolDraw" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_draw" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Draw" android:tint="@color/colorPrimary"/>
-            <ImageButton android:id="@+id/toolText" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_text" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Text" android:tint="@color/colorPrimary"/>
-            <ImageButton android:id="@+id/toolEraser" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_eraser" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Eraser" android:tint="@color/colorPrimary"/>
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/colorDivider" android:layout_marginVertical="8dp"/>
-            <ImageButton android:id="@+id/toolRotate" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_rotate" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Rotate" android:tint="@color/colorSecondary"/>
-            <ImageButton android:id="@+id/toolPageNumber" android:layout_width="44dp" android:layout_height="44dp" android:src="@drawable/ic_numbers" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="Numbers" android:tint="@color/colorSecondary"/>
+
+            <ImageButton
+                android:id="@+id/toolAnnotate"
+                android:layout_width="44dp" android:layout_height="44dp"
+                android:src="@drawable/ic_annotate"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Anotasi"
+                android:tint="@color/colorPrimary"/>
+
+            <ImageButton
+                android:id="@+id/toolHighlight"
+                android:layout_width="44dp" android:layout_height="44dp"
+                android:src="@drawable/ic_highlight"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Highlight"
+                android:tint="@color/colorSecondary"/>
+
+            <ImageButton
+                android:id="@+id/toolDraw"
+                android:layout_width="44dp" android:layout_height="44dp"
+                android:src="@drawable/ic_draw"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Draw"
+                android:tint="@color/colorPrimary"/>
+
+            <ImageButton
+                android:id="@+id/toolText"
+                android:layout_width="44dp" android:layout_height="44dp"
+                android:src="@drawable/ic_text"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Text"
+                android:tint="@color/colorPrimary"/>
+
+            <ImageButton
+                android:id="@+id/toolEraser"
+                android:layout_width="44dp" android:layout_height="44dp"
+                android:src="@drawable/ic_eraser"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Eraser"
+                android:tint="@color/colorPrimary"/>
+
+            <View
+                android:layout_width="match_parent" android:layout_height="1dp"
+                android:background="@color/colorDivider"
+                android:layout_marginTop="4dp" android:layout_marginBottom="4dp"/>
+
+            <ImageButton
+                android:id="@+id/toolRotate"
+                android:layout_width="44dp" android:layout_height="44dp"
+                android:src="@drawable/ic_rotate"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Rotate"
+                android:tint="@color/colorSecondary"/>
+
+            <ImageButton
+                android:id="@+id/toolPageNumber"
+                android:layout_width="44dp" android:layout_height="44dp"
+                android:src="@drawable/ic_numbers"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Numbers"
+                android:tint="@color/colorSecondary"/>
         </LinearLayout>
+
+        <!-- PDF viewer area -->
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <TextView
+
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imgPdfPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="PDF Page"/>
+
+            </androidx.core.widget.NestedScrollView>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+            <!-- Page navigation overlay -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:text="✏️\n\nMode Edit Aktif\nGunakan alat di sebelah kiri"
-                android:textColor="@color/colorTextSecondary"
-                android:textSize="16sp"
-                android:textAlignment="center"/>
+                android:background="#CC000000">
+
+                <ImageButton
+                    android:id="@+id/btnPrevPage"
+                    android:layout_width="36dp" android:layout_height="36dp"
+                    android:src="@drawable/ic_arrow_left"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="@color/white"
+                    android:contentDescription="Prev"/>
+
+                <TextView
+                    android:id="@+id/tvPageNum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="1/1"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"/>
+
+                <ImageButton
+                    android:id="@+id/btnNextPage"
+                    android:layout_width="36dp" android:layout_height="36dp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="@color/white"
+                    android:contentDescription="Next"/>
+            </LinearLayout>
+
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>
