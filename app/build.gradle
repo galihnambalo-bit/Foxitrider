@@ -69,3 +69,14 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 }
 // already added above - no changes needed
+
+android.signingConfigs {
+    release {
+        storeFile file('../foxitrider.jks')
+        storePassword 'FoxitRider2024!'
+        keyAlias 'foxitrider'
+        keyPassword 'FoxitRider2024!'
+    }
+}
+
+android.buildTypes.release.signingConfig = android.signingConfigs.release
