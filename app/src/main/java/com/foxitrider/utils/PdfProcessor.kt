@@ -27,7 +27,8 @@ object PdfProcessor {
     }
 
     fun getOutputDir(context: Context): File {
-        val dir = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "FoxitRider")
+        // Save to Downloads/FoxitRider - visible in file manager
+        val dir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "FoxitRider")
         if (!dir.exists()) dir.mkdirs()
         return dir
     }
