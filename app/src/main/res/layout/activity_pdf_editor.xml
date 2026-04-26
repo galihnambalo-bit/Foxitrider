@@ -39,7 +39,7 @@
                 android:layout_width="44dp" android:layout_height="44dp"
                 android:src="@drawable/ic_annotate"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Anotasi"
+                android:contentDescription="Tambah Teks"
                 android:tint="@color/colorPrimary"/>
 
             <ImageButton
@@ -71,7 +71,7 @@
                 android:layout_width="44dp" android:layout_height="44dp"
                 android:src="@drawable/ic_eraser"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Eraser"
+                android:contentDescription="Hapus"
                 android:tint="@color/colorPrimary"/>
 
             <View
@@ -92,11 +92,11 @@
                 android:layout_width="44dp" android:layout_height="44dp"
                 android:src="@drawable/ic_numbers"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Numbers"
+                android:contentDescription="Watermark"
                 android:tint="@color/colorSecondary"/>
         </LinearLayout>
 
-        <!-- PDF viewer area -->
+        <!-- PDF + Overlay -->
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -106,14 +106,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/imgPdfPage"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:contentDescription="PDF Page"/>
+                    android:layout_height="wrap_content">
 
+                    <!-- PDF Image -->
+                    <ImageView
+                        android:id="@+id/imgPdfPage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="PDF"/>
+
+                    <!-- Overlay Editor - transparent, sits on top of PDF -->
+                    <com.foxitrider.ui.views.PdfOverlayEditor
+                        android:id="@+id/overlayEditor"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"/>
+
+                </FrameLayout>
             </androidx.core.widget.NestedScrollView>
 
             <ProgressBar
@@ -123,7 +136,7 @@
                 android:layout_gravity="center"
                 android:visibility="gone"/>
 
-            <!-- Page navigation overlay -->
+            <!-- Page navigation -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
