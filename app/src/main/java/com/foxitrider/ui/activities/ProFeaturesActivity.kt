@@ -5,13 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.foxitrider.ads.AdManager
 import com.foxitrider.databinding.ActivityProFeaturesBinding
@@ -28,19 +25,16 @@ class ProFeaturesActivity : AppCompatActivity() {
 
     private val pickFiles = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
         if (uris.isNotEmpty()) {
-            selectedUris.clear()
-            selectedUris.addAll(uris)
+            selectedUris.clear(); selectedUris.addAll(uris)
             binding.btnSelectFile.text = "✅ ${uris.size} file dipilih"
             Toast.makeText(this, "✅ ${uris.size} file PDF dipilih", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private val pickSingleFile = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    private val pickSingle = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-            selectedUris.clear()
-            selectedUris.add(it)
-            val name = it.lastPathSegment ?: "file dipilih"
-            binding.btnSelectFile.text = "✅ $name"
+            selectedUris.clear(); selectedUris.add(it)
+            binding.btnSelectFile.text = "✅ ${it.lastPathSegment}"
             Toast.makeText(this, "✅ File dipilih", Toast.LENGTH_SHORT).show()
         }
     }
@@ -65,95 +59,63 @@ class ProFeaturesActivity : AppCompatActivity() {
         binding.tvFeatureDesc.text = getDesc(currentFeature)
 
         binding.btnSelectFile.setOnClickListener {
-            if (currentFeature == ProFeatureManager.ProFeature.MERGE) {
-                pickFiles.launch("application/pdf")
-            } else {
-                pickSingleFile.launch("application/pdf")
-            }
+            if (currentFeature == ProFeatureManager.ProFeature.MERGE) pickFiles.launch("application/pdf")
+            else pickSingle.launch("application/pdf")
         }
 
         binding.btnExecute.setOnClickListener {
             if (selectedUris.isEmpty()) {
-                Toast.makeText(this, "⚠️ Pilih file PDF terlebih dahulu!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "⚠️ Pilih file PDF dulu!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (ProFeatureManager.isUnlocked(this, currentFeature)) {
-                runFeature()
-            } else {
-                showAdDialog()
-            }
+            if (ProFeatureManager.isUnlocked(this, currentFeature)) runFeature()
+            else showAdDialog()
         }
     }
 
     private fun showAdDialog() {
         AlertDialog.Builder(this)
             .setTitle("🎬 Buka Fitur Pro GRATIS!")
-            .setMessage("Tonton iklan ~30 detik untuk membuka '${currentFeature.displayName}' GRATIS!\n\n✅ Tidak perlu bayar\n✅ Akses 24 jam penuh")
-            .setPositiveButton("🎬 Tonton Iklan Sekarang") { _, _ ->
+            .setMessage("Tonton iklan ~30 detik untuk membuka '${currentFeature.displayName}' GRATIS!\n\n✅ Tidak perlu bayar\n✅ Akses 24 jam")
+            .setPositiveButton("🎬 Tonton Iklan") { _, _ ->
                 if (AdManager.isRewardedReady()) {
                     AdManager.showRewarded(this,
                         onRewarded = {
                             ProFeatureManager.unlock(this, currentFeature)
-                            Toast.makeText(this, "🎉 Fitur '${currentFeature.displayName}' berhasil dibuka!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, "🎉 Fitur dibuka!", Toast.LENGTH_LONG).show()
                             runFeature()
                         },
-                        onFailed = {
-                            Toast.makeText(this, "❌ Iklan gagal, coba lagi", Toast.LENGTH_SHORT).show()
-                            AdManager.loadRewarded(this)
-                        }
-                    )
-                } else {
-                    AdManager.loadRewarded(this)
-                    Toast.makeText(this, "⏳ Iklan sedang dimuat... Coba lagi 5 detik", Toast.LENGTH_LONG).show()
-                }
-            }
-            .setNegativeButton("Batal", null).show()
+                        onFailed = { Toast.makeText(this, "❌ Iklan gagal", Toast.LENGTH_SHORT).show(); AdManager.loadRewarded(this) })
+                } else { AdManager.loadRewarded(this); Toast.makeText(this, "⏳ Iklan dimuat...", Toast.LENGTH_SHORT).show() }
+            }.setNegativeButton("Batal", null).show()
     }
 
     private fun runFeature() {
         binding.btnExecute.isEnabled = false
         binding.btnExecute.text = "⏳ Memproses..."
-
         lifecycleScope.launch {
             val result: Result<java.io.File> = when (currentFeature) {
                 ProFeatureManager.ProFeature.MERGE -> {
                     if (selectedUris.size < 2) {
-                        runOnUiThread { Toast.makeText(this@ProFeaturesActivity, "Pilih minimal 2 file untuk digabung", Toast.LENGTH_SHORT).show() }
+                        runOnUiThread { Toast.makeText(this@ProFeaturesActivity, "Pilih minimal 2 file!", Toast.LENGTH_SHORT).show() }
                         resetButton(); return@launch
                     }
                     PdfProcessor.merge(this@ProFeaturesActivity, selectedUris)
                 }
-                ProFeatureManager.ProFeature.SPLIT -> {
-                    showSplitDialog(); return@launch
-                }
-                ProFeatureManager.ProFeature.COMPRESS -> {
-                    PdfProcessor.compress(this@ProFeaturesActivity, selectedUris[0])
-                }
-                ProFeatureManager.ProFeature.WATERMARK -> {
-                    showWatermarkDialog(); return@launch
-                }
-                ProFeatureManager.ProFeature.ENCRYPT -> {
-                    showEncryptDialog(); return@launch
-                }
-                ProFeatureManager.ProFeature.CONVERT -> {
-                    PdfProcessor.compress(this@ProFeaturesActivity, selectedUris[0])
-                }
-                ProFeatureManager.ProFeature.SIGN -> { startActivity(android.content.Intent(this, SignatureActivity::class.java).apply { putExtra(SignatureActivity.EXTRA_PDF_PATH, selectedUris.firstOrNull()?.path ?: "") }); resetButton(); return@launch
-                ProFeatureManager.ProFeature.SIGN_UNUSED -> {
-                    PdfProcessor.addWatermark(this@ProFeaturesActivity, selectedUris[0], "SIGNED")
-                }
+                ProFeatureManager.ProFeature.SPLIT -> { showSplitDialog(); return@launch }
+                ProFeatureManager.ProFeature.COMPRESS -> PdfProcessor.compress(this@ProFeaturesActivity, selectedUris[0])
+                ProFeatureManager.ProFeature.WATERMARK -> { showWatermarkDialog(); return@launch }
+                ProFeatureManager.ProFeature.ENCRYPT -> { showEncryptDialog(); return@launch }
+                ProFeatureManager.ProFeature.CONVERT -> PdfProcessor.compress(this@ProFeaturesActivity, selectedUris[0])
+                ProFeatureManager.ProFeature.SIGN -> PdfProcessor.addWatermark(this@ProFeaturesActivity, selectedUris[0], "DITANDATANGANI")
             }
-
             runOnUiThread {
                 result.onSuccess { file ->
-                    Toast.makeText(this@ProFeaturesActivity,
-                        "✅ Berhasil!\nDisimpan: ${file.name}\nUkuran: ${file.length()/1024}KB",
-                        Toast.LENGTH_LONG).show()
-                    binding.btnExecute.text = "✅ Selesai! Buka File"
+                    Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil!\n${file.name}", Toast.LENGTH_LONG).show()
+                    binding.btnExecute.text = "✅ Selesai!"
                     binding.btnExecute.isEnabled = true
-                    binding.btnExecute.setOnClickListener { shareFile(file) }
-                }.onFailure { e ->
-                    Toast.makeText(this@ProFeaturesActivity, "❌ Gagal: ${e.message}", Toast.LENGTH_LONG).show()
+                }.onFailure {
+                    Toast.makeText(this@ProFeaturesActivity, "❌ Gagal: ${it.message}", Toast.LENGTH_LONG).show()
                     resetButton()
                 }
             }
@@ -162,25 +124,22 @@ class ProFeaturesActivity : AppCompatActivity() {
 
     private fun showSplitDialog() {
         resetButton()
-        val layout = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.VERTICAL; setPadding(50,20,50,20) }
-        val etStart = EditText(this).apply { hint = "Halaman mulai (misal: 1)"; inputType = android.text.InputType.TYPE_CLASS_NUMBER }
-        val etEnd = EditText(this).apply { hint = "Halaman akhir (misal: 3)"; inputType = android.text.InputType.TYPE_CLASS_NUMBER }
-        layout.addView(etStart); layout.addView(etEnd)
+        val et1 = EditText(this).apply { hint = "Halaman mulai"; inputType = android.text.InputType.TYPE_CLASS_NUMBER }
+        val et2 = EditText(this).apply { hint = "Halaman akhir"; inputType = android.text.InputType.TYPE_CLASS_NUMBER }
+        val layout = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL; setPadding(50,20,50,20)
+            addView(et1); addView(et2)
+        }
         AlertDialog.Builder(this).setTitle("✂️ Pisahkan Halaman").setView(layout)
             .setPositiveButton("Pisahkan") { _, _ ->
-                val s = etStart.text.toString().toIntOrNull() ?: 1
-                val e = etEnd.text.toString().toIntOrNull() ?: 1
-                binding.btnExecute.isEnabled = false
-                binding.btnExecute.text = "⏳ Memproses..."
+                val s = et1.text.toString().toIntOrNull() ?: 1
+                val e = et2.text.toString().toIntOrNull() ?: 1
+                binding.btnExecute.isEnabled = false; binding.btnExecute.text = "⏳ Memproses..."
                 lifecycleScope.launch {
                     val result = PdfProcessor.split(this@ProFeaturesActivity, selectedUris[0], s, e)
                     runOnUiThread {
-                        result.onSuccess { file ->
-                            Toast.makeText(this@ProFeaturesActivity, "✅ Halaman $s-$e berhasil dipisahkan!\n${file.name}", Toast.LENGTH_LONG).show()
-                            binding.btnExecute.text = "✅ Buka File"
-                            binding.btnExecute.isEnabled = true
-                            binding.btnExecute.setOnClickListener { shareFile(file) }
-                        }.onFailure { e -> Toast.makeText(this@ProFeaturesActivity, "❌ Gagal: ${e.message}", Toast.LENGTH_SHORT).show(); resetButton() }
+                        result.onSuccess { file -> Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil!\n${file.name}", Toast.LENGTH_LONG).show(); binding.btnExecute.text = "✅ Selesai!"; binding.btnExecute.isEnabled = true }
+                        .onFailure { Toast.makeText(this@ProFeaturesActivity, "❌ ${it.message}", Toast.LENGTH_SHORT).show(); resetButton() }
                     }
                 }
             }.setNegativeButton("Batal") { _, _ -> resetButton() }.show()
@@ -188,19 +147,16 @@ class ProFeaturesActivity : AppCompatActivity() {
 
     private fun showWatermarkDialog() {
         resetButton()
-        val et = EditText(this).apply { hint = "Teks watermark (misal: RAHASIA)"; setText("CONFIDENTIAL") }
-        AlertDialog.Builder(this).setTitle("💧 Teks Watermark").setView(et)
+        val et = EditText(this).apply { hint = "Teks watermark"; setText("CONFIDENTIAL") }
+        AlertDialog.Builder(this).setTitle("💧 Watermark").setView(et)
             .setPositiveButton("Tambahkan") { _, _ ->
                 val text = et.text.toString().ifEmpty { "WATERMARK" }
                 binding.btnExecute.isEnabled = false; binding.btnExecute.text = "⏳ Memproses..."
                 lifecycleScope.launch {
                     val result = PdfProcessor.addWatermark(this@ProFeaturesActivity, selectedUris[0], text)
                     runOnUiThread {
-                        result.onSuccess { file ->
-                            Toast.makeText(this@ProFeaturesActivity, "✅ Watermark '$text' ditambahkan!\n${file.name}", Toast.LENGTH_LONG).show()
-                            binding.btnExecute.text = "✅ Buka File"; binding.btnExecute.isEnabled = true
-                            binding.btnExecute.setOnClickListener { shareFile(file) }
-                        }.onFailure { e -> Toast.makeText(this@ProFeaturesActivity, "❌ Gagal: ${e.message}", Toast.LENGTH_SHORT).show(); resetButton() }
+                        result.onSuccess { file -> Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil!\n${file.name}", Toast.LENGTH_LONG).show(); binding.btnExecute.text = "✅ Selesai!"; binding.btnExecute.isEnabled = true }
+                        .onFailure { Toast.makeText(this@ProFeaturesActivity, "❌ ${it.message}", Toast.LENGTH_SHORT).show(); resetButton() }
                     }
                 }
             }.setNegativeButton("Batal") { _, _ -> resetButton() }.show()
@@ -217,23 +173,11 @@ class ProFeaturesActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     val result = PdfProcessor.encrypt(this@ProFeaturesActivity, selectedUris[0], pass)
                     runOnUiThread {
-                        result.onSuccess { file ->
-                            Toast.makeText(this@ProFeaturesActivity, "✅ PDF berhasil dienkripsi!\nPassword: $pass\n${file.name}", Toast.LENGTH_LONG).show()
-                            binding.btnExecute.text = "✅ Buka File"; binding.btnExecute.isEnabled = true
-                            binding.btnExecute.setOnClickListener { shareFile(file) }
-                        }.onFailure { e -> Toast.makeText(this@ProFeaturesActivity, "❌ Gagal: ${e.message}", Toast.LENGTH_SHORT).show(); resetButton() }
+                        result.onSuccess { file -> Toast.makeText(this@ProFeaturesActivity, "✅ Berhasil!\nPassword: $pass\n${file.name}", Toast.LENGTH_LONG).show(); binding.btnExecute.text = "✅ Selesai!"; binding.btnExecute.isEnabled = true }
+                        .onFailure { Toast.makeText(this@ProFeaturesActivity, "❌ ${it.message}", Toast.LENGTH_SHORT).show(); resetButton() }
                     }
                 }
             }.setNegativeButton("Batal") { _, _ -> resetButton() }.show()
-    }
-
-    private fun shareFile(file: java.io.File) {
-        val uri = FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
-        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-            type = "application/pdf"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }, "Bagikan / Simpan PDF"))
     }
 
     private fun resetButton() {
@@ -241,7 +185,7 @@ class ProFeaturesActivity : AppCompatActivity() {
         binding.btnExecute.text = "🎬 Tonton Iklan & Jalankan"
     }
 
-    private fun getIcon(f: ProFeatureManager.ProFeature) = when (f) {
+    private fun getIcon(f: ProFeatureManager.ProFeature) = when(f) {
         ProFeatureManager.ProFeature.MERGE -> "🔗"
         ProFeatureManager.ProFeature.SPLIT -> "✂️"
         ProFeatureManager.ProFeature.COMPRESS -> "📦"
@@ -251,12 +195,12 @@ class ProFeaturesActivity : AppCompatActivity() {
         ProFeatureManager.ProFeature.SIGN -> "✍️"
     }
 
-    private fun getDesc(f: ProFeatureManager.ProFeature) = when (f) {
-        ProFeatureManager.ProFeature.MERGE -> "Gabungkan beberapa PDF menjadi satu dokumen"
-        ProFeatureManager.ProFeature.SPLIT -> "Pisahkan halaman PDF tertentu menjadi file baru"
+    private fun getDesc(f: ProFeatureManager.ProFeature) = when(f) {
+        ProFeatureManager.ProFeature.MERGE -> "Gabungkan beberapa PDF menjadi satu"
+        ProFeatureManager.ProFeature.SPLIT -> "Pisahkan halaman PDF tertentu"
         ProFeatureManager.ProFeature.COMPRESS -> "Kurangi ukuran file PDF"
-        ProFeatureManager.ProFeature.WATERMARK -> "Tambahkan tanda air teks ke semua halaman"
-        ProFeatureManager.ProFeature.ENCRYPT -> "Lindungi PDF dengan kata sandi 256-bit"
+        ProFeatureManager.ProFeature.WATERMARK -> "Tambahkan tanda air ke PDF"
+        ProFeatureManager.ProFeature.ENCRYPT -> "Lindungi PDF dengan kata sandi"
         ProFeatureManager.ProFeature.CONVERT -> "Kompres dan optimalkan PDF"
         ProFeatureManager.ProFeature.SIGN -> "Tambahkan tanda tangan ke PDF"
     }
