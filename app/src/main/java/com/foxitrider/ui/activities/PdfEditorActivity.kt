@@ -262,22 +262,6 @@ class PdfEditorActivity : AppCompatActivity() {
             try {
                 val bmp = currentBitmap ?: return@launch
                 val overlayBmp = Bitmap.createBitmap(bmp.width, bmp.height, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(overlayBmp)
-                canvas.drawBitmap(bmp, 0f, 0f, null)
-
-                // Draw overlays scaled to PDF size
-                val scaledOverlays = binding.overlayEditor.renderToBitmap(
-                    bmp.width, bmp.height,
-                    binding.overlayEditor.width, binding.overlayEditor.height
-                )
-
-                val paint = android.graphics.Paint().apply { isAntiAlias = true }
-                val bgPaint = android.graphics.Paint().apply { style = android.graphics.Paint.Style.FILL }
-
-                for ((overlay, point) in scaledOverlays) {
-                    val scaledFontSize = overlay.fontSize * (bmp.width.toFloat() / binding.overlayEditor.width)
-                    paint.textSize = scaledFontSize
-                    paint.color = overlay.color
                     bgPaint.color = overlay.bgColor
 
                     val bounds = android.graphics.Rect()
