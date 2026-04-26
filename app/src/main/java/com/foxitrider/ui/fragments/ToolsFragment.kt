@@ -18,7 +18,7 @@ class ToolsFragment : Fragment() {
         b.btnWatermark.setOnClickListener { launch("watermark") }
         b.btnEncrypt.setOnClickListener { launch("encrypt") }
         b.btnConvert.setOnClickListener { launch("convert") }
-        b.btnSign.setOnClickListener { launch("sign") }
+        b.btnSign.setOnClickListener { startActivity(Intent(requireContext(), com.foxitrider.ui.activities.SignatureActivity::class.java)) }
     }
     override fun onDestroyView() { super.onDestroyView(); _b = null }
 }

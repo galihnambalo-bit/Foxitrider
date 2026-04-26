@@ -138,7 +138,8 @@ class ProFeaturesActivity : AppCompatActivity() {
                 ProFeatureManager.ProFeature.CONVERT -> {
                     PdfProcessor.compress(this@ProFeaturesActivity, selectedUris[0])
                 }
-                ProFeatureManager.ProFeature.SIGN -> {
+                ProFeatureManager.ProFeature.SIGN -> { startActivity(android.content.Intent(this, SignatureActivity::class.java).apply { putExtra(SignatureActivity.EXTRA_PDF_PATH, selectedUris.firstOrNull()?.path ?: "") }); resetButton(); return@launch
+                ProFeatureManager.ProFeature.SIGN_UNUSED -> {
                     PdfProcessor.addWatermark(this@ProFeaturesActivity, selectedUris[0], "SIGNED")
                 }
             }
