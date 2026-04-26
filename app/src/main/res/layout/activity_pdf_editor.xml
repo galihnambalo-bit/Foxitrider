@@ -19,159 +19,162 @@
         app:titleTextColor="@color/white"
         app:navigationIconTint="@color/white"/>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_weight="1">
 
-        <!-- Left toolbar -->
-        <LinearLayout
-            android:layout_width="52dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/colorSurface"
-            android:padding="4dp"
-            android:elevation="4dp">
-
-            <ImageButton
-                android:id="@+id/toolAnnotate"
-                android:layout_width="44dp" android:layout_height="44dp"
-                android:src="@drawable/ic_annotate"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Tambah Teks"
-                android:tint="@color/colorPrimary"/>
-
-            <ImageButton
-                android:id="@+id/toolHighlight"
-                android:layout_width="44dp" android:layout_height="44dp"
-                android:src="@drawable/ic_highlight"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Highlight"
-                android:tint="@color/colorSecondary"/>
-
-            <ImageButton
-                android:id="@+id/toolDraw"
-                android:layout_width="44dp" android:layout_height="44dp"
-                android:src="@drawable/ic_draw"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Draw"
-                android:tint="@color/colorPrimary"/>
-
-            <ImageButton
-                android:id="@+id/toolText"
-                android:layout_width="44dp" android:layout_height="44dp"
-                android:src="@drawable/ic_text"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Text"
-                android:tint="@color/colorPrimary"/>
-
-            <ImageButton
-                android:id="@+id/toolEraser"
-                android:layout_width="44dp" android:layout_height="44dp"
-                android:src="@drawable/ic_eraser"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Hapus"
-                android:tint="@color/colorPrimary"/>
-
-            <View
-                android:layout_width="match_parent" android:layout_height="1dp"
-                android:background="@color/colorDivider"
-                android:layout_marginTop="4dp" android:layout_marginBottom="4dp"/>
-
-            <ImageButton
-                android:id="@+id/toolRotate"
-                android:layout_width="44dp" android:layout_height="44dp"
-                android:src="@drawable/ic_rotate"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Rotate"
-                android:tint="@color/colorSecondary"/>
-
-            <ImageButton
-                android:id="@+id/toolPageNumber"
-                android:layout_width="44dp" android:layout_height="44dp"
-                android:src="@drawable/ic_numbers"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Watermark"
-                android:tint="@color/colorSecondary"/>
-        </LinearLayout>
-
-        <!-- PDF + Overlay -->
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <androidx.core.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <FrameLayout
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imgPdfPage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="PDF"/>
+                <com.foxitrider.ui.views.PdfDrawingView
+                    android:id="@+id/drawingView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"/>
+                <com.foxitrider.ui.views.PdfOverlayEditor
+                    android:id="@+id/overlayEditor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"/>
+            </FrameLayout>
+        </androidx.core.widget.NestedScrollView>
 
-                    <!-- PDF Image -->
-                    <ImageView
-                        android:id="@+id/imgPdfPage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:contentDescription="PDF"/>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
-                    <!-- Overlay Editor - transparent, sits on top of PDF -->
-                    <com.foxitrider.ui.views.PdfOverlayEditor
-                        android:id="@+id/overlayEditor"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"/>
-
-                </FrameLayout>
-            </androidx.core.widget.NestedScrollView>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_gravity="top|center_horizontal"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="#CC000000"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:layout_marginTop="4dp">
+            <ImageButton
+                android:id="@+id/btnPrevPage"
+                android:layout_width="32dp" android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_left"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:contentDescription="Prev"/>
+            <TextView
+                android:id="@+id/tvPageNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"/>
+                android:text="1/1"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"/>
+            <ImageButton
+                android:id="@+id/btnNextPage"
+                android:layout_width="32dp" android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_right"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/white"
+                android:contentDescription="Next"/>
+        </LinearLayout>
 
-            <!-- Page navigation -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="bottom"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:background="#CC000000">
+    </FrameLayout>
 
-                <ImageButton
-                    android:id="@+id/btnPrevPage"
-                    android:layout_width="36dp" android:layout_height="36dp"
-                    android:src="@drawable/ic_arrow_left"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="@color/white"
-                    android:contentDescription="Prev"/>
-
-                <TextView
-                    android:id="@+id/tvPageNum"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="1/1"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"/>
-
-                <ImageButton
-                    android:id="@+id/btnNextPage"
-                    android:layout_width="36dp" android:layout_height="36dp"
-                    android:src="@drawable/ic_arrow_right"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="@color/white"
-                    android:contentDescription="Next"/>
-            </LinearLayout>
-
-        </FrameLayout>
+    <!-- Color picker row -->
+    <LinearLayout
+        android:id="@+id/colorPickerRow"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/colorSurface"
+        android:visibility="gone">
+        <View android:id="@+id/colorRed" android:layout_width="30dp" android:layout_height="30dp" android:background="#FFD32F2F" android:layout_margin="4dp"/>
+        <View android:id="@+id/colorBlue" android:layout_width="30dp" android:layout_height="30dp" android:background="#FF1565C0" android:layout_margin="4dp"/>
+        <View android:id="@+id/colorBlack" android:layout_width="30dp" android:layout_height="30dp" android:background="#FF000000" android:layout_margin="4dp"/>
+        <View android:id="@+id/colorGreen" android:layout_width="30dp" android:layout_height="30dp" android:background="#FF2E7D32" android:layout_margin="4dp"/>
+        <View android:id="@+id/colorYellow" android:layout_width="30dp" android:layout_height="30dp" android:background="#FFFDD835" android:layout_margin="4dp"/>
+        <View android:id="@+id/colorOrange" android:layout_width="30dp" android:layout_height="30dp" android:background="#FFFF6F00" android:layout_margin="4dp"/>
     </LinearLayout>
+
+    <!-- Bottom toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:background="@color/colorSurface"
+        android:elevation="8dp">
+
+        <LinearLayout android:id="@+id/toolAnnotate"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_draw" android:tint="#D32F2F"/>
+            <View android:id="@+id/penIndicator" android:layout_width="24dp" android:layout_height="3dp" android:background="#D32F2F"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/toolHighlight"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_highlight" android:tint="#FDD835"/>
+            <View android:id="@+id/highlightIndicator" android:layout_width="24dp" android:layout_height="3dp" android:background="#FDD835" android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/toolText"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_text" android:tint="@color/colorText"/>
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/toolEraser"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_eraser" android:tint="@color/colorText"/>
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/toolDraw"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_undo" android:tint="@color/colorText"/>
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/toolRotate"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_share" android:tint="@color/colorText"/>
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/toolPageNumber"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:orientation="vertical" android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_numbers" android:tint="@color/colorText"/>
+            <View android:layout_width="24dp" android:layout_height="3dp" android:background="@android:color/transparent"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>
