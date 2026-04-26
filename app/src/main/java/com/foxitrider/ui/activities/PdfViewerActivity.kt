@@ -5,25 +5,21 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.foxitrider.R
 import com.foxitrider.ads.AdManager
 import com.foxitrider.databinding.ActivityPdfViewerBinding
-import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener
-import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
-import com.github.barteksc.pdfviewer.listener.OnPageErrorListener
-import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle
+import com.rajat.pdfviewer.PdfViewerActivity as PdfLib
 import java.io.File
 
 class PdfViewerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPdfViewerBinding
-    private var currentPage = 0
-    private var totalPages = 0
     private var pdfFile: File? = null
+    private var currentPage = 0
+    private var totalPages = 1
 
     companion object {
         const val EXTRA_PDF_PATH = "pdf_path"
@@ -38,10 +34,23 @@ class PdfViewerActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Small banner ad at top (non-intrusive)
         setupBannerAd()
 
-        loadPdf()
+        val pdfPath = intent.getStringExtra(EXTRA_PDF_PATH)
+        val pdfUri = intent.getStringExtra(EXTRA_PDF_URI)
+
+        when {
+            pdfPath != null -> {
+                pdfFile = File(pdfPath)
+                supportActionBar?.title = pdfFile?.name ?: "PDF Viewer"
+                openWithPdfLib(null, pdfPath)
+            }
+            pdfUri != null -> {
+                supportActionBar?.title = "Dokumen PDF"
+                openWithPdfLib(pdfUri, null)
+            }
+        }
+
         setupControls()
     }
 
@@ -50,94 +59,34 @@ class PdfViewerActivity : AppCompatActivity() {
         binding.adBannerContainer.addView(bannerAd)
     }
 
-    private fun loadPdf() {
-        val pdfPath = intent.getStringExtra(EXTRA_PDF_PATH)
-        val pdfUri = intent.getStringExtra(EXTRA_PDF_URI)
-
-        when {
-            pdfPath != null -> {
-                pdfFile = File(pdfPath)
-                loadPdfFromFile(pdfFile!!)
+    private fun openWithPdfLib(uriStr: String?, path: String?) {
+        try {
+            val intent = if (path != null) {
+                PdfLib.launchPdfFromPath(
+                    this,
+                    path,
+                    pdfFile?.name ?: "PDF",
+                    "FoxitRider",
+                    enableDownload = false
+                )
+            } else {
+                PdfLib.launchPdfFromUrl(
+                    this,
+                    uriStr ?: "",
+                    "PDF",
+                    "FoxitRider",
+                    enableDownload = false
+                )
             }
-            pdfUri != null -> {
-                val uri = Uri.parse(pdfUri)
-                loadPdfFromUri(uri)
-            }
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error membuka PDF: ${e.message}", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun loadPdfFromFile(file: File) {
-        supportActionBar?.title = file.name
-        binding.progressLoading.visibility = View.VISIBLE
-
-        binding.pdfView
-            .fromFile(file)
-            .defaultPage(0)
-            .onLoad(object : OnLoadCompleteListener {
-                override fun loadComplete(nbPages: Int) {
-                    totalPages = nbPages
-                    binding.progressLoading.visibility = View.GONE
-                    updatePageInfo()
-                }
-            })
-            .onPageChange(object : OnPageChangeListener {
-                override fun onPageChanged(page: Int, pageCount: Int) {
-                    currentPage = page
-                    updatePageInfo()
-                }
-            })
-            .onError { t ->
-                binding.progressLoading.visibility = View.GONE
-                Toast.makeText(this, "Error membuka PDF: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-            .onPageError(object : OnPageErrorListener {
-                override fun onPageError(page: Int, t: Throwable?) {
-                    Toast.makeText(this@PdfViewerActivity, "Error pada halaman $page", Toast.LENGTH_SHORT).show()
-                }
-            })
-            .scrollHandle(DefaultScrollHandle(this))
-            .enableSwipe(true)
-            .swipeHorizontal(false)
-            .enableDoubletap(true)
-            .enableAnnotationRendering(true)
-            .load()
-    }
-
-    private fun loadPdfFromUri(uri: Uri) {
-        supportActionBar?.title = "Dokumen PDF"
-        binding.progressLoading.visibility = View.VISIBLE
-
-        binding.pdfView
-            .fromUri(uri)
-            .defaultPage(0)
-            .onLoad(object : OnLoadCompleteListener {
-                override fun loadComplete(nbPages: Int) {
-                    totalPages = nbPages
-                    binding.progressLoading.visibility = View.GONE
-                    updatePageInfo()
-                }
-            })
-            .onPageChange(object : OnPageChangeListener {
-                override fun onPageChanged(page: Int, pageCount: Int) {
-                    currentPage = page
-                    updatePageInfo()
-                }
-            })
-            .onError { t ->
-                binding.progressLoading.visibility = View.GONE
-                Toast.makeText(this, "Error membuka PDF: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-            .scrollHandle(DefaultScrollHandle(this))
-            .enableSwipe(true)
-            .swipeHorizontal(false)
-            .enableDoubletap(true)
-            .load()
     }
 
     private fun setupControls() {
         binding.fabEdit.setOnClickListener {
             pdfFile?.let { file ->
-                // Show interstitial before editing
                 AdManager.showInterstitialAd(this) {
                     val intent = Intent(this, PdfEditorActivity::class.java)
                     intent.putExtra(PdfEditorActivity.EXTRA_PDF_PATH, file.absolutePath)
@@ -146,21 +95,9 @@ class PdfViewerActivity : AppCompatActivity() {
             } ?: Toast.makeText(this, "File tidak tersedia untuk diedit", Toast.LENGTH_SHORT).show()
         }
 
-        binding.btnPrevPage.setOnClickListener {
-            if (currentPage > 0) {
-                binding.pdfView.jumpTo(currentPage - 1, true)
-            }
-        }
-
-        binding.btnNextPage.setOnClickListener {
-            if (currentPage < totalPages - 1) {
-                binding.pdfView.jumpTo(currentPage + 1, true)
-            }
-        }
-    }
-
-    private fun updatePageInfo() {
-        binding.tvPageInfo.text = "${currentPage + 1} / $totalPages"
+        binding.btnPrevPage.setOnClickListener { }
+        binding.btnNextPage.setOnClickListener { }
+        binding.tvPageInfo.text = "PDF"
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -170,24 +107,8 @@ class PdfViewerActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            android.R.id.home -> {
-                onBackPressedDispatcher.onBackPressed()
-                true
-            }
-            R.id.action_share -> {
-                sharePdf()
-                true
-            }
-            R.id.action_edit -> {
-                pdfFile?.let { file ->
-                    AdManager.showInterstitialAd(this) {
-                        val intent = Intent(this, PdfEditorActivity::class.java)
-                        intent.putExtra(PdfEditorActivity.EXTRA_PDF_PATH, file.absolutePath)
-                        startActivity(intent)
-                    }
-                }
-                true
-            }
+            android.R.id.home -> { onBackPressedDispatcher.onBackPressed(); true }
+            R.id.action_share -> { sharePdf(); true }
             else -> super.onOptionsItemSelected(item)
         }
     }

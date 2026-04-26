@@ -53,7 +53,7 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
     // PDF Viewer - versi stabil dari Maven Central
-    implementation 'io.github.afreakyelf:Pdf-Viewer:2.1.1'
+    implementation 'com.rajat:pdfviewer:2.1.0'
 
     // AdMob
     implementation 'com.google.android.gms:play-services-ads:23.0.0'
